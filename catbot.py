@@ -33,6 +33,15 @@ async def on_message(message):
         with open('images/ragdoll.jpg', 'rb') as picture:
             await client.send_file(message.channel, picture)
 
+    if (message.content.startswith('c.info') or message.content.startswith('c.botinfo')):
+        print(f"telling {message.author.name} info about catbot")
+        embed = discord.Embed(title="catbot", description="catbot is a basic bot with cute mini games where you can collect cats (=ᵔ ﻌ ᵔ=)ﾉ", color=0x4c8cd6)
+        embed.add_field(name="Authors", value="@joclaire2#5534 (bot design) and @ribman#7979 (bot coding)")
+        embed.add_field(name="Invite link", value="[Click here to invite catbot to your server!](<https://discordapp.com/api/oauth2/authorize?client_id=625644432741629992&permissions=388160&scope=bot>)")
+        embed.add_field(name="Official catbot support server", value="[Click here to join our server!](<https://discord.gg/G6A4VEa>)")
+        print(embed)
+        await client.send_message(message.channel, embed=embed)
+
     if message.content.startswith('c.api'):
         print(f"Sending {message.author.name} a cat pic from unsplash")
         game = message.content[5:]
