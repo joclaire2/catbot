@@ -2,7 +2,7 @@
 
 import os
 import discord
-import unsplash
+#import unsplash
 
 from dotenv import load_dotenv
 
@@ -44,20 +44,16 @@ async def on_message(message):
 
     if message.content.startswith('c.api'):
         print(f"Sending {message.author.name} a cat pic from unsplash")
-        game = message.content[5:]
+        game = message.content[6:]
         gres = requests.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/')
         gdata = gres.json()
+        print (gdata)
         for i in gdata["applist"]["apps"]:
             if (i["name"] == game):
                 app = (i["appid"])
                 priceres = requests.get(f"https://store.steampowered.com/api/appdetails/?appids={app}")
                 priced = priceres.json()
                 price = (priced[f"{app}"]["data"]["price_overview"].get("final"))
-                msg = 'Here is a cute cat for you~! {0.author.mention}'.format(message)
-                print(msg)
-                await client.send_message(message.channel, msg)
-                with open('images/ragdoll.jpg', 'rb') as picture:
-                    await client.send_file(message.channel, picture)
 
     if message.content.startswith('!api'):
         game = message.content[5:]
