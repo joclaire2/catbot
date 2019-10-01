@@ -1,9 +1,8 @@
-# Work with Python 3.6 only
+# catbot.py
+# version 0.1.4
 
 import os
 import discord
-#import unsplash
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,53 +20,29 @@ async def on_message(message):
 
     if (message.content.startswith('hello') or message.content.startswith('hey') or  message.content.startswith('hi')):
         print(f"Saying hi to {message.author.name}")
-        msg = 'Hello! {0.author.mention}'.format(message)
-        print(msg)
-        await client.send_message(message.channel, msg)
+        msg = f"Hello! {message.author.mention}"
+        #msg = 'Hello! {0.author.mention}'.format(message)
+        embed = discord.Embed(title="(✿◕‿◠)~★", description=msg, color=0x4c8cd6)
+        print(embed)
+        await client.send_message(message.channel, embed=embed)
+
 
     if (message.content.startswith('c.pic') or message.content.startswith('c.picture')):
         print(f"Sending {message.author.name} a cat pic")
-        msg = 'Here is a cute cat for you~! {0.author.mention}'.format(message)
-        print(msg)
-        await client.send_message(message.channel, msg)
-        with open('images/ragdoll.jpg', 'rb') as picture:
-            await client.send_file(message.channel, picture)
+        embed = discord.Embed(title="(✿◕‿◠)~★", description="Here is a cute cat for you~!", color=0x4c8cd6)
+        embed.set_image(url="https://images.unsplash.com/photo-1532386236358-a33d8a9434e3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60")
+        embed.add_field(name="Credit", value="Photo by Raul Varzar https://unsplash.com/@calypso999 on Unsplash https://unsplash.com/")
+        print(embed)
+        await client.send_message(message.channel, embed=embed)
 
     if (message.content.startswith('c.info') or message.content.startswith('c.botinfo')):
         print(f"telling {message.author.name} info about catbot")
-        embed = discord.Embed(title="catbot", description="catbot is a basic bot with cute mini games where you can collect cats (=ᵔ ﻌ ᵔ=)ﾉ", color=0x4c8cd6)
+        embed = discord.Embed(title="(✿◕‿◠)~★", description="catbot is a basic bot with cute mini games where you can collect cats (=ᵔ ﻌ ᵔ=)ﾉ", color=0x4c8cd6)
         embed.add_field(name="Authors", value="@joclaire2#5534 (bot design) and @ribman#7979 (bot coding)")
         embed.add_field(name="Invite link", value="[Click here to invite catbot to your server!](<https://discordapp.com/api/oauth2/authorize?client_id=625644432741629992&permissions=388160&scope=bot>)")
         embed.add_field(name="Official catbot support server", value="[Click here to join our server!](<https://discord.gg/G6A4VEa>)")
         print(embed)
         await client.send_message(message.channel, embed=embed)
-
-    if message.content.startswith('c.api'):
-        print(f"Sending {message.author.name} a cat pic from unsplash")
-        game = message.content[6:]
-        gres = requests.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/')
-        gdata = gres.json()
-        print (gdata)
-        for i in gdata["applist"]["apps"]:
-            if (i["name"] == game):
-                app = (i["appid"])
-                priceres = requests.get(f"https://store.steampowered.com/api/appdetails/?appids={app}")
-                priced = priceres.json()
-                price = (priced[f"{app}"]["data"]["price_overview"].get("final"))
-
-    if message.content.startswith('!api'):
-        game = message.content[5:]
-        print(f"the words after 'api' were: {game}")
-        gres = requests.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/')
-        gdata = gres.json()
-        for i in gdata["applist"]["apps"]:
-            if (i["name"] == game):
-                app = (i["appid"])
-                priceres = requests.get(f"https://store.steampowered.com/api/appdetails/?appids={app}")
-                priced = priceres.json()
-                price = (priced[f"{app}"]["data"]["price_overview"].get("final"))
-                msg = f"{game} is currently{price}".format(message)
-                await client.send_message(message.channel, msg)
 
 # -------------------------------------------------------
 @client.event
