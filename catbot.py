@@ -50,7 +50,10 @@ async def on_message(message):
     if (msgText.startswith('c.pic') or msgText.startswith('c.picture')):
         print(f"Sending {msgrName} a cat pic")
         embed = discord.Embed(title=random_text_face(), description="Here is a cute cat for you~!", color=embedColor)
-        embed.set_image(url="https://source.unsplash.com/random/?cat")
+        seed = ''.join(random.choice(string.lowercase) for x in range(10))
+        catPicUrl = f"https://source.unsplash.com/random/?cat&{seed}"
+        print(catPicUrl)
+        embed.set_image(url=catPicUrl)
         embed.add_field(name="Credit", value="Photos by random contributors on Unsplash https://unsplash.com/")
         print(embed)
         await msgChannel.send(embed=embed)
