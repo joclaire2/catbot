@@ -5,7 +5,7 @@
 # =======================================================
 import os
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv('../.secure/.env')
 token = os.getenv('DISCORD_TOKEN')
 # =======================================================
 import discord
@@ -35,7 +35,7 @@ async def on_message(message):
         #msg = 'Hello! {0.author.mention}'.format(message)
         embed = discord.Embed(title="(✿◕‿◠)~★", description=msg, color=0x4c8cd6)
         print(embed)
-        await client.send_message(message.channel, embed=embed)
+        await message.channel.send(embed=embed)
 
 # -------------------------------------------------------
     if (message.content.startswith('c.pic') or message.content.startswith('c.picture')):
@@ -44,7 +44,7 @@ async def on_message(message):
         embed.set_image(url="https://images.unsplash.com/photo-1532386236358-a33d8a9434e3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60")
         embed.add_field(name="Credit", value="Photo by Raul Varzar https://unsplash.com/@calypso999 on Unsplash https://unsplash.com/")
         print(embed)
-        await client.send_message(message.channel, embed=embed)
+        await message.channel.send(embed=embed)
 
 # -------------------------------------------------------
     if (message.content.startswith('c.info') or message.content.startswith('c.botinfo')):
@@ -54,7 +54,7 @@ async def on_message(message):
         embed.add_field(name="Invite link", value="[Click here to invite catbot to your server!](<https://discordapp.com/api/oauth2/authorize?client_id=625644432741629992&permissions=388160&scope=bot>)")
         embed.add_field(name="Official catbot support server", value="[Click here to join our server!](<https://discord.gg/G6A4VEa>)")
         print(embed)
-        await client.send_message(message.channel, embed=embed)
+        await message.channel.send(embed=embed)
 
 # -------------------------------------------------------
     if (message.content.startswith('c.gitpull')):
@@ -63,7 +63,7 @@ async def on_message(message):
         output = os.system('git pull')
         embed = discord.Embed(title="git pull", description=output, color=0x4c8cd6)
         print(embed)
-        await client.send_message(message.channel, embed=embed)
+        await message.channel.send(embed=embed)
         os.execl(sys.executable, *([sys.executable]+sys.argv))
         exit
 # =======================================================
