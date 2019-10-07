@@ -1,6 +1,8 @@
 # catbot runner
 # version 0.2.0+
 # =======================================================
+import subprocess    # for git calls
+# =======================================================
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -54,6 +56,17 @@ async def on_message(message):
         print(embed)
         await client.send_message(message.channel, embed=embed)
 
+# -------------------------------------------------------
+    if (message.content.startswith('c.gitpull')):
+        print(f"Pulling latest from git for {message.author.name}")
+        msg = f"{message.author.mention} wants more catbot? Ok!"
+        output = subprocess.check_output(["git", "pull"])
+        embed = discord.Embed(title="git pull", description=output, color=0x4c8cd6)
+        print(embed)
+        await client.send_message(message.channel, embed=embed)
+        os.execl(sys.executable, *([sys.executable]+sys.argv))
+        exit
+# =======================================================
 # =======================================================
 # Create the bot
 client.run(token)
