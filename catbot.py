@@ -10,12 +10,7 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
-token = os.getenv('DISCORD_TOKEN')
-textFaces = load_text_faces()
 
-# =======================================================
-# Create the bot
-client = discord.Client()
 # =======================================================
 @client.event
 async def on_ready():
@@ -76,6 +71,12 @@ def load_text_faces():
     return lines
 
 # =======================================================
-# Create the bot
+# Set up and run the bot
+
+textFaces = load_text_faces()
+
+client = discord.Client()
+token = os.getenv('DISCORD_TOKEN')
+
 client.run(token)
 # =======================================================
