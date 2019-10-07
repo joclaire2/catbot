@@ -8,6 +8,7 @@ from discord.ext import commands
 # =======================================================
 # Load global parameters
 import os
+import random
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 
