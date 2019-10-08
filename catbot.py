@@ -6,10 +6,11 @@ import discord
 from discord.ext import commands
 
 # =======================================================
-# Load global parameters
+# Load libraries and global parameters
 import os
 import random
 import string
+import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 
@@ -69,6 +70,26 @@ async def on_message(message):
         print(embed)
         await msgChannel.send(embed=embed)
 
+# -------------------------------------------------------
+    if (msgText.startswith('c.loaddb')):
+        print(f"Loading db for {msgrName}")
+        msg = f"Loading db for {msgAuthor.mention}"
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        print(embed)
+        await msgChannel.send(embed=embed)
+        exec_sql('''CREATE TABLE stocks(date text, trans text, symbol text, qty real, price real)''')
+        exec_sql("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+
+# -------------------------------------------------------
+    if (msgText.startswith('c.getdata')):
+        print(f"Get data for {msgrName}")
+        msg = f"Get data for {msgAuthor.mention}"
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        print(embed)
+        await msgChannel.send(embed=embed)
+        RESULT = exec_sql("SELECT * FROM stocks")
+        print(RESULT)
+
 # =======================================================
 def random_text_face():
     return random.choice(textFaces)
@@ -79,6 +100,14 @@ def load_text_faces():
         lines = f.read().splitlines()
     return lines
 
+# =======================================================
+def exec_sql(sql):
+    conn = sqlite3.connect('catbot.db')
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()
+    conn.close()
+    
 # =======================================================
 # Set up and run the bot
 
