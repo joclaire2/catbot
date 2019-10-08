@@ -55,7 +55,7 @@ async def on_message(message):
         catPicUrl = f"https://source.unsplash.com/random/?cat&{seed}"
         print(catPicUrl)
         embed.set_image(url=catPicUrl)
-        embed.add_field(name="Credit", value="Photos by random contributors on Unsplash https://unsplash.com/")
+        embed.add_field(name="Credit", value="Photos from [Unsplash](<https://unsplash.com/>)")
         print(embed)
         await msgChannel.send(embed=embed)
 
