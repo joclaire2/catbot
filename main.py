@@ -16,4 +16,6 @@ os.chdir('./catbot')
 # softer option to cloning
 # os.system('git pull')
 
+# os.system('python db_setup.py')
+
 os.system('python catbot.py')
