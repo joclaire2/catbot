@@ -55,7 +55,7 @@ async def on_message(message):
         catPicUrl = f"https://source.unsplash.com/random/?cat&{seed}"
         print(catPicUrl)
         embed.set_image(url=catPicUrl)
-        embed.add_field(name="Credit", value="Photos by random contributors on Unsplash https://unsplash.com/")
+        embed.add_field(name="Credit", value="Photos from [Unsplash](<https://unsplash.com/>)")
         print(embed)
         await msgChannel.send(embed=embed)
 
@@ -63,7 +63,7 @@ async def on_message(message):
     if (msgText.startswith('c.info') or msgText.startswith('c.botinfo')):
         print(f"telling {msgrName} info about catbot")
         embed = discord.Embed(title=random_text_face(), description="catbot is a basic bot with cute mini games where you can collect cats (=ᵔ ﻌ ᵔ=)ﾉ", color=embedColor)
-        embed.add_field(name="Authors", value="@joclaire2#5534 (bot design) and @ribman#7979 (bot coding)")
+        embed.add_field(name="Authors", value="@joclaire2#5534 (bot design), @ribman#7979 (bot coding) and @hananananah#7858 (illustrations)")
         embed.add_field(name="Invite link", value="[Click here to invite catbot to your server!](<https://discordapp.com/api/oauth2/authorize?client_id=625644432741629992&permissions=388160&scope=bot>)")
         embed.add_field(name="Official catbot support server", value="[Click here to join our server!](<https://discord.gg/G6A4VEa>)")
         print(embed)
