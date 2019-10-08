@@ -1,6 +1,6 @@
 # catbot runner
 # Boot
-bot_version = 0.2.1
+bot_version = '0.2.1'
 from datetime import datetime
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print(f"{dt_string} Bootup catbot version {bot_version}")
