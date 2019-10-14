@@ -1,6 +1,6 @@
 # catbot runner
 # Boot
-bot_version = '0.2.1'
+bot_version = '0.2.2'
 from datetime import datetime
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print(f"{dt_string} Bootup catbot version {bot_version}")
@@ -115,6 +115,22 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
         print(f"{dt_string} Result:\n{result}")
 
+#
+=======================================================
+@client.event
+async def on_group_join(channel, user):
+    dt_string = get_date()
+    print(f"Greeting new arrival {user.name} as at {dt_string} on {channel}")
+    msg=''
+    if (!user.bot):
+        msg = f"Ahoy to you {user.mention}, looking for a cat?"
+    else:
+        print(f"{user.name} is a bot!!!")
+        msg = f"Hissss ... {user.name} is a bot!"
+    embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+    print(embed)
+    await msgChannel.send(embed=embed)
+    
 # =======================================================
 def random_text_face():
     return random.choice(textFaces)
