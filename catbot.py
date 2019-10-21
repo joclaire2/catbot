@@ -115,8 +115,7 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
         print(f"{dt_string} Result:\n{result}")
 
-#
-=======================================================
+# =======================================================
 @client.event
 async def on_group_join(channel, user):
     dt_string = get_date()
