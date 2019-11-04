@@ -1,7 +1,8 @@
 # catbot runner
 # Boot
-bot_version = '0.2.2'
+bot_version = '0.3.0'
 from datetime import datetime
+from datetime import timedelta
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print(f"{dt_string} Bootup catbot version {bot_version}")
 # =======================================================
@@ -108,26 +109,67 @@ async def on_message(message):
         msg = f"Membership info for {msgAuthor.mention}"
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         if len(result) > 0:
-            embed.add_field(name="Date joined", value=result[0]['date'])
+            embed.add_field(name="Date joined", value=result[0]['join_date'])
         else:
             embed.add_field(name="You're not a cat owner!", value="tut, tut")
         print(embed)
         await msgChannel.send(embed=embed)
         print(f"{dt_string} Result:\n{result}")
 
+# -------------------------------------------------------
+    if (msgText.startswith('c.daily')):
+        print(f"{dt_string}, {msgrName} is asking for their daily coin")
+        now_dt = datetime.now()
+        result = get_owner(msgrName)
+        last_daily = result[0].get('last_daily')
+        last_dt = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S')
+        diff_dates = now_dt - last_dt
+        msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt}, that's {diff_dates} timey-things ago. "
+        if diff_dates > timedelta(days=1):
+          msg += "Let's give you another one! "
+          add_coin(msgrName)
+          new_coins = get_coins(msgrName)
+          msg += f"Now you have {new_coins} coins."
+        else:
+          coins = get_coins(msgrName)
+          msg += f"You already have {coins} coins. Come back tomorrow and I'll give you another one."
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        print(embed)
+        await msgChannel.send(embed=embed)
+
 # =======================================================
-@client.event
+# This doesn't work yet
+# @client.event
 async def on_group_join(channel, user):
     dt_string = get_date()
+    embedColor = 0x4c8cd6
     print(f"Greeting new arrival {user.name} as at {dt_string} on {channel}")
     msg=''
-    if (!user.bot):
+    if not user.bot:
         msg = f"Ahoy to you {user.mention}, looking for a cat?"
     else:
         print(f"{user.name} is a bot!!!")
         msg = f"Hissss ... {user.name} is a bot!"
     embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
     print(embed)
+    await channel.send(embed=embed)
+
+# =======================================================
+# This doesn't work yet
+# @client.event
+async def on_member_join(member):
+    dt_string = get_date()
+    embedColor = 0x4c8cd6
+    print(f"Greeting new arrival {member.name} as at {dt_string}")
+    msg=''
+    if not member.user.bot:
+        msg = f"Ahoy to you {member.user.mention}, looking for a cat?"
+    else:
+        print(f"{member.user.name} is a bot!!!")
+        msg = f"Hissss ... {member.user.name} is a bot!"
+    embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+    print(embed)
+    msgChannel = member.channel
     await msgChannel.send(embed=embed)
     
 # =======================================================
@@ -161,23 +203,33 @@ def query_sql(sql):
 # -------------------------------------------------------
 def add_owner(name):
     dt_string = get_date()
-    stmt = f"INSERT INTO cat_owners (date, owner) VALUES ('{dt_string}','{name}');"
+    stmt = f"INSERT INTO cat_owners (join_date, owner_id) VALUES ('{dt_string}','{name}');"
     exec_sql(stmt)
 
 # -------------------------------------------------------
 def remove_owner(name):
-    dt_string = get_date()
-    stmt = f"DELETE FROM cat_owners WHERE owner = '{name}';"
+    stmt = f"DELETE FROM cat_owners WHERE owner_id = '{name}';"
     exec_sql(stmt)
 
 # -------------------------------------------------------
 def get_owner(name):
-    stmt = f"SELECT * FROM cat_owners WHERE owner = '{name}';"
+    stmt = f"SELECT * FROM cat_owners WHERE owner_id = '{name}';"
     result = query_sql(stmt)
     dt_string = get_date()
     print(f"{dt_string} Result:\n{result}")
     return result
 
+# -------------------------------------------------------
+def add_coin(name):
+  stmt = f"UPDATE cat_owners SET coins=coins+1, last_daily='{get_date()}' WHERE owner_id='{name}'"
+  exec_sql(stmt)
+
+# -------------------------------------------------------
+def get_coins(name):
+  stmt = f"SELECT coins FROM cat_owners WHERE owner_id='{name}';"
+  result = query_sql(stmt)
+  return result[0].get('coins')
+  
 # =======================================================
 # Set up and run the bot
 
