@@ -125,6 +125,7 @@ async def on_message(message):
         diff_dates = now_dt - last_dt
         msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt} and it's now {now_dt}.  That's {diff_dates} timey-things ago. "
         if diff_dates > '1':
+          print("diffdates is > 1")
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         print(embed)
         await msgChannel.send(embed=embed)
