@@ -124,6 +124,7 @@ async def on_message(message):
         last_daily = result[0].get('last_daily')
         last_dt = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S')
         diff_dates = now_dt - last_dt
+<<<<<<< HEAD
         msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt}, that's {diff_dates} timey-things ago. "
         if diff_dates > timedelta(days=1):
           msg += "Let's give you another one! "
@@ -133,6 +134,11 @@ async def on_message(message):
         else:
           coins = get_coins(msgrName)
           msg += f"You already have {coins} coins. Come back tomorrow and I'll give you another one."
+=======
+        msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt} and it's now {now_dt}.  That's {diff_dates} timey-things ago. "
+        if diff_dates > '1':
+          print("diffdates is > 1")
+>>>>>>> b8495a136f7fb36742bac7d6e7df0b2dd822686c
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         print(embed)
         await msgChannel.send(embed=embed)
