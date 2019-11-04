@@ -16,6 +16,6 @@ os.system('git add *')
 
 os.system('git commit -m "Setting up push from Repl.it"')
 
-os.system('git push origin')
+os.system('git push --set-upstream origin master')
 
 os.system('git status')
