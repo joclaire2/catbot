@@ -118,7 +118,6 @@ async def on_message(message):
 # -------------------------------------------------------
     if (msgText.startswith('c.daily')):
         print(f"{dt_string}, {msgrName} is asking for their daily coin")
-<<<<<<< HEAD
         now_dt = datetime.now()
         result = get_owner(msgrName)
         last_daily = result[0].get('last_daily')
@@ -126,10 +125,6 @@ async def on_message(message):
         diff_dates = now_dt - last_dt
         msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt} and it's now {now_dt}.  That's {diff_dates} timey-things ago. "
         if diff_dates > '1':
-=======
-        result = get_owner(msgrName)
-        msg = f"Hey, {msgAuthor.mention}, I'm looking up whether to give you a coin ..."
->>>>>>> 09b7dd3eb4b0e8ca7279c205a11c5c597b0306ea
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         print(embed)
         await msgChannel.send(embed=embed)

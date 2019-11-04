@@ -12,7 +12,6 @@ os.system('git config --global user.email "ribman@gmail.com"')
 
 os.system('git config --global user.name "Rob Manthey"')
 
-
 os.system('git add *')
 
 os.system('git commit -m "Setting up push from Repl.it"')
