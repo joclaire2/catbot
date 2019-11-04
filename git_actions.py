@@ -6,6 +6,10 @@ os.system('git status')
 # os.system('git checkout development')
 # os.system('git checkout master')
 
+# clean up local checkout if anyone's been tinkering
+#os.system('git reset --hard')
+
+# softer option to cloning
 os.system('git pull origin master')
 
 os.system('git config --global user.email "ribman@gmail.com"')
