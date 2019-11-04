@@ -6,6 +6,7 @@ os.system('git status')
 # os.system('git checkout development')
 # os.system('git checkout master')
 
+os.system('git pull origin master')
 
 os.system('git config --global user.email "ribman@gmail.com"')
 
