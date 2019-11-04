@@ -15,6 +15,6 @@ os.system('git add *')
 
 os.system('git commit -m "working date diff in daily"')
 
-os.system('git push origin')
+os.system('git push --set-upstream origin master')
 
 os.system('git status')
