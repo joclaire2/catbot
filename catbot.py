@@ -25,11 +25,11 @@ import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 dbPath = '../sqlite/catbot.db'
-defaultChannel = discord.Channel('622421258986061837')  # catbot-testing = 622421258986061837
 
 # =======================================================
 # Build Discord Client
 client = discord.Client()
+defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
 
 # -------------------------------------------------------
 def get_date_str():
