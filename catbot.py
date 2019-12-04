@@ -296,12 +296,13 @@ def prowl():
 
 thread1 = threading.Thread(target = prowl, args = ())
 # thread1.start()
-prowl()
 
 # =======================================================
 # Set up and run the bot
 textFaces = load_text_faces()
 token = os.getenv('DISCORD_TOKEN')
+
+prowl()
 
 # keep_alive()
 client.run(token)
