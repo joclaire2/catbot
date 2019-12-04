@@ -25,7 +25,7 @@ import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 dbPath = '../sqlite/catbot.db'
-defaultChannel = None
+defaultChannel = discord.Channel('622421258986061837')  # catbot-testing = 622421258986061837
 
 # =======================================================
 # Build Discord Client
@@ -288,10 +288,10 @@ def prowl():
         embedColor = 0x4c8cd6
         print(msg)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        #if defaultChannel is not None:
-        #    defaultChannel.send(embed=embed)
-        time.sleep(33)
-        if count > 5:
+        if defaultChannel is not None:
+            defaultChannel.send(embed=embed)
+        time.sleep(3)
+        if count >= 3:
             cont = False 
 
 thread1 = threading.Thread(target = prowl, args = ())
