@@ -2,6 +2,7 @@
 # Boot
 bot_version = '0.3.0'
 from datetime import datetime
+from datetime import timedelta
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print(f"{dt_string} Bootup catbot version {bot_version}")
 # =======================================================
@@ -118,8 +119,23 @@ async def on_message(message):
 # -------------------------------------------------------
     if (msgText.startswith('c.daily')):
         print(f"{dt_string}, {msgrName} is asking for their daily coin")
+        now_dt = datetime.now()
         result = get_owner(msgrName)
-        msg = f"Hey, {msgAuthor.mention}, I'm looking up whether to give you a coin ..."
+        last_daily = result[0].get('last_daily')
+        last_dt = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S')
+        diff_dates = now_dt - last_dt
+
+        msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt}, that's {diff_dates} timey-things ago. "
+        
+        if diff_dates > timedelta(days=1):
+          msg += "Let's give you another one! "
+          add_coin(msgrName)
+          new_coins = get_coins(msgrName)
+          msg += f"Now you have {new_coins} coins."
+        else:
+          coins = get_coins(msgrName)
+          msg += f"You already have {coins} coins. Come back tomorrow and I'll give you another one."
+          
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         print(embed)
         await msgChannel.send(embed=embed)
@@ -206,6 +222,17 @@ def get_owner(name):
     print(f"{dt_string} Result:\n{result}")
     return result
 
+# -------------------------------------------------------
+def add_coin(name):
+  stmt = f"UPDATE cat_owners SET coins=coins+1, last_daily='{get_date()}' WHERE owner_id='{name}'"
+  exec_sql(stmt)
+
+# -------------------------------------------------------
+def get_coins(name):
+  stmt = f"SELECT coins FROM cat_owners WHERE owner_id='{name}';"
+  result = query_sql(stmt)
+  return result[0].get('coins')
+  
 # =======================================================
 # Set up and run the bot
 
