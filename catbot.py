@@ -71,6 +71,8 @@ async def on_message(message):
     msgChannel = message.channel
     embedColor = 0x4c8cd6
     defaultChannel = msgChannel
+    
+    print ("Channel = {}".format(msgChannel))
 
 # -------------------------------------------------------
     if (msgText in ['c.info','c.botinfo']):
@@ -293,7 +295,8 @@ def prowl():
             cont = False 
 
 thread1 = threading.Thread(target = prowl, args = ())
-thread1.start()
+# thread1.start()
+prowl()
 
 # =======================================================
 # Set up and run the bot
