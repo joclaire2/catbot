@@ -1,6 +1,6 @@
 # catbot runner
 # Boot
-bot_version = '0.3.1'
+bot_version = '0.3.2'
 
 # from async import async
 from datetime import datetime
@@ -217,22 +217,6 @@ async def nothing2():
     embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
     msgChannel = member.channel
     await msgChannel.send(embed=embed)
-    
-# =======================================================
-def prowl():
-    cont = True
-    count = 0
-    while cont:
-        count = count + 1
-        msg = "Purrrrrrrr"
-        embedColor = 0x4c8cd6
-        print(msg)
-        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        #if defaultChannel is not None:
-        #    defaultChannel.send(embed=embed)
-        time.sleep(33)
-        if count > 5:
-            cont = False 
 
 # =======================================================
 def random_text_face():
@@ -289,17 +273,33 @@ def get_coins(name):
   stmt = "SELECT coins FROM cat_owners WHERE owner_id='{}';".format(name)
   result = query_sql(stmt)
   return result[0].get('coins')
-  
-# =======================================================
-# Set up and run the bot
 
-textFaces = load_text_faces()
+# =======================================================
+   Dev Zone
+# =======================================================
+def prowl():
+    cont = True
+    count = 0
+    while cont:
+        count = count + 1
+        msg = "Purrrrrrrr"
+        embedColor = 0x4c8cd6
+        print(msg)
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        #if defaultChannel is not None:
+        #    defaultChannel.send(embed=embed)
+        time.sleep(33)
+        if count > 5:
+            cont = False 
 
 thread1 = threading.Thread(target = prowl, args = ())
 thread1.start()
-# keep_alive()
 
+# =======================================================
+# Set up and run the bot
+textFaces = load_text_faces()
 token = os.getenv('DISCORD_TOKEN')
 
+# keep_alive()
 client.run(token)
 # =======================================================
