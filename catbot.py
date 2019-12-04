@@ -25,11 +25,11 @@ import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 dbPath = '../sqlite/catbot.db'
+defaultChannel = None
 
 # =======================================================
 # Build Discord Client
 client = discord.Client()
-defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
 
 # -------------------------------------------------------
 def get_date_str():
@@ -302,8 +302,10 @@ thread1 = threading.Thread(target = prowl, args = ())
 textFaces = load_text_faces()
 token = os.getenv('DISCORD_TOKEN')
 
-prowl()
-
 # keep_alive()
 client.run(token)
+
+defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
+prowl()
+
 # =======================================================
