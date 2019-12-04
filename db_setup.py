@@ -1,7 +1,7 @@
-
+	
 import sqlite3
 
-dbPath = '../sqllite/catbot.db'
+dbPath = '../sqlite/catbot.db'
 
 def exec_sql(sql):
     conn = sqlite3.connect(dbPath)
@@ -31,7 +31,7 @@ exec_sql("INSERT INTO cat_owners (id, owner_id, join_date, coins, last_daily) VA
 
 result = query_sql("SELECT * FROM cat_owners")
 for row in result:
-    print(f"result: {row}")
+    print("result: {}".format(row))
 
 
 # cat_breeds 
@@ -44,7 +44,7 @@ exec_sql("INSERT INTO cat_breeds (breed) VALUES ('Abyssinian'),('Burmese'),('Sia
 
 result = query_sql("SELECT * FROM cat_breeds")
 for row in result:
-    print(f"result: {row}")
+    print("result: {}".format(row))
 
 
 # cats 
@@ -57,7 +57,7 @@ exec_sql("INSERT INTO cats (id, name, breed, age, image) VALUES (1,'Timmy','Burm
 
 result = query_sql("SELECT * FROM cats")
 for row in result:
-    print(f"result: {row}")
+    print("result: {}".format(row))
 
 
 # cat_ownership 
@@ -70,5 +70,5 @@ exec_sql("INSERT INTO cat_ownership (owner, cat) VALUES (1,1),(1,2)  ")
 
 result = query_sql("SELECT * FROM cat_ownership")
 for row in result:
-    print(f"result: {row}")
+    print("result: {}".format(row))
 	

@@ -2,7 +2,7 @@
 
 import sqlite3
 
-dbPath = '../sqllite/catbot.db'
+dbPath = '../sqlite/catbot.db'
 
 def exec_sql(sql):
     conn = sqlite3.connect(dbPath)
@@ -22,5 +22,5 @@ def query_sql(sql):
                
 result = query_sql("SELECT * FROM cat_owners")
 for row in result:
-    print(f"result: {row}")
+    print("result: {}".format(row))
 	

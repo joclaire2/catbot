@@ -1,10 +1,15 @@
 # catbot runner
 # Boot
-bot_version = '0.3.0'
+bot_version = '0.3.1'
+
+# from async import async
 from datetime import datetime
 from datetime import timedelta
+import time
+# from keep_alive import keep_alive
+
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-print(f"{dt_string} Bootup catbot version {bot_version}")
+print("{} Bootup catbot version {}".format(dt_string,bot_version))
 # =======================================================
 # Load Discord Library
 import discord
@@ -13,26 +18,40 @@ from discord.ext import commands
 # =======================================================
 # Load libraries and global parameters
 import os
+import threading
 import random
 import string
 import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
-dbPath = '../sqllite/catbot.db'
+dbPath = '../sqlite/catbot.db'
+defaultChannel = None
 
 # =======================================================
 # Build Discord Client
 client = discord.Client()
 
 # -------------------------------------------------------
-def get_date():
+def get_date_str():
+    return datetime.now().strftime("%Y-%m-%d")
+
+# -------------------------------------------------------
+def get_datetime_str():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# -------------------------------------------------------
+def get_date():
+    return datetime.strptime(get_date_str(), '%Y-%m-%d')
+
+# -------------------------------------------------------
+def get_datetime():
+    return datetime.strptime(get_datetime_str(), '%Y-%m-%d %H:%M:%S')
 
 # =======================================================
 @client.event
 async def on_ready():
-    dt_string = get_date()
-    print(f"{dt_string} Logged in as")
+    dt_string = get_datetime_str()
+    print("{} Logged in as".format(dt_string))
     print(client.user.name)
     print(client.user.id)
     print('------')
@@ -40,7 +59,7 @@ async def on_ready():
 # =======================================================
 @client.event
 async def on_message(message):
-    dt_string = get_date()
+    dt_string = get_datetime_str()
     msgAuthor = message.author
     # we do not want the bot to reply to itself
     if msgAuthor == client.user:
@@ -51,130 +70,170 @@ async def on_message(message):
     msgrName = msgAuthor.name
     msgChannel = message.channel
     embedColor = 0x4c8cd6
+    defaultChannel = msgChannel
 
 # -------------------------------------------------------
-    if (msgText.startswith('hello') or msgText.startswith('hey') or  msgText.startswith('hi')):
-        print(f"Saying hi to {msgrName}")
-        msg = f"Hello! {msgAuthor.mention}"
-        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        print(embed)
-        await msgChannel.send(embed=embed)
-
-# -------------------------------------------------------
-    if (msgText.startswith('c.pic') or msgText.startswith('c.picture')):
-        print(f"{dt_string} Sending {msgrName} a cat pic")
-        embed = discord.Embed(title=random_text_face(), description="Here is a cute cat for you~!", color=embedColor)
-        seed = ''.join(random.choice(string.ascii_lowercase) for x in range(10))
-        catPicUrl = f"https://source.unsplash.com/random/?cat&{seed}"
-        print(catPicUrl)
-        embed.set_image(url=catPicUrl)
-        embed.add_field(name="Credit", value="Photos from [Unsplash](<https://unsplash.com/>)")
-        print(embed)
-        await msgChannel.send(embed=embed)
-
-# -------------------------------------------------------
-    if (msgText.startswith('c.info') or msgText.startswith('c.botinfo')):
-        print(f"{dt_string} Telling {msgrName} info about catbot")
-        embed = discord.Embed(title=random_text_face(), description="catbot is a basic bot with cute mini games where you can collect cats (=ᵔ ﻌ ᵔ=)ﾉ", color=embedColor)
+    if (msgText in ['c.info','c.botinfo']):
+        print("{} - Telling {} info about catbot".format(dt_string,msgrName))
+        embed = discord.Embed(title=random_text_face(), description="catbot is a basic bot with cute mini games where you can collect cats", color=embedColor)
         embed.add_field(name="Version", value=bot_version)
         embed.add_field(name="Authors", value="@joclaire2#5534 (bot design), @ribman#7979 (bot coding) and @hananananah#7858 (illustrations)")
         embed.add_field(name="Invite link", value="[Click here to invite catbot to your server!](<https://discordapp.com/api/oauth2/authorize?client_id=625644432741629992&permissions=388160&scope=bot>)")
         embed.add_field(name="Official catbot support server", value="[Click here to join our server!](<https://discord.gg/G6A4VEa>)")
-        print(embed)
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    if (msgText.startswith('c.join')):
-        print(f"{dt_string} Adding {msgrName} to db")
-        msg = f"Adding {msgAuthor.mention} as a cat owner"
+    elif (msgText in ['hello','hey','hi']):
+        print("{} - Saying hi to {}".format(dt_string,msgrName))
+        msg = "Hello! {}".format(msgAuthor.mention)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        print(embed)
+        await msgChannel.send(embed=embed)
+
+# -------------------------------------------------------
+    elif (msgText in ['c.pic','c.picture']):
+        print("{} - Sending {} a cat pic".format(dt_string,msgrName))
+        embed = discord.Embed(title=random_text_face(), description="Here is a cute cat for you~!", color=embedColor)
+        seed = ''.join(random.choice(string.ascii_lowercase) for x in range(10))
+        catPicUrl = "https://source.unsplash.com/random/?cat&{}".format(seed)
+        print("{} - catPicUrl".format(dt_string))
+        embed.set_image(url=catPicUrl)
+        embed.add_field(name="Credit", value="Photos from [Unsplash](<https://unsplash.com/>)")
+        await msgChannel.send(embed=embed)
+
+# -------------------------------------------------------
+    elif (msgText == 'c.join'):
+        print("{} - Adding {} to db".format(dt_string,msgrName))
+        msg = "Adding {} as a cat owner".format(msgAuthor.mention)
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
         add_owner(msgrName)
 
 # -------------------------------------------------------
-    if (msgText.startswith('c.unjoin')):
-        print(f"{dt_string} Removing {msgrName} from db")
-        msg = f"Ending {msgAuthor.mention}'s cat ownership"
+    elif (msgText == 'c.unjoin'):
+        print("{} - Removing {} from db".format(dt_string,msgrName))
+        msg = "Ending {}'s cat ownership".format(msgAuthor.mention)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         embed.add_field(name="You're giving up being a cat owner!", value="Waaaah  :( ")
-        print(embed)
         await msgChannel.send(embed=embed)
         remove_owner(msgrName)
 
 # -------------------------------------------------------
-    if (msgText.startswith('c.member')):
-        print(f"{dt_string} Getting data for {msgrName}")
+    elif (msgText == 'c.member'):
+        print("{} - Getting data for {}".format(dt_string,msgrName))
         result = get_owner(msgrName)
-        msg = f"Membership info for {msgAuthor.mention}"
+        msg = "Membership info for {}".format(msgAuthor.mention)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         if len(result) > 0:
             embed.add_field(name="Date joined", value=result[0]['join_date'])
         else:
             embed.add_field(name="You're not a cat owner!", value="tut, tut")
-        print(embed)
         await msgChannel.send(embed=embed)
-        print(f"{dt_string} Result:\n{result}")
+        print("{} Result:\n{}".format(dt_string,result))
 
 # -------------------------------------------------------
-    if (msgText.startswith('c.daily')):
-        print(f"{dt_string}, {msgrName} is asking for their daily coin")
-        now_dt = datetime.now()
+    elif (msgText == 'c.daily'):
+        print("{} - {} is asking for their daily coin".format(dt_string,msgrName))
+        now_dttm = get_datetime()
+        print("now_dttm = {}".format(now_dttm))
+        now_dt = get_date()
+        print("now_dt = {}".format(now_dt))
         result = get_owner(msgrName)
         last_daily = result[0].get('last_daily')
-        last_dt = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S')
-        diff_dates = now_dt - last_dt
-
-        msg = f"Hey, {msgAuthor.mention}, I last gave you a coin on {last_dt}, that's {diff_dates} timey-things ago. "
+        print("last_daily = {}".format(last_daily))
+        last_dttm = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S')
+        print("last_dttm = {}".format(last_dttm))
+        last_dt = datetime.strptime(last_daily, '%Y-%m-%d %H:%M:%S').replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+        print("last_dt = {}".format(last_dt))
+        diff_datetimes = (now_dttm - last_dttm)
+        print("diff_datetimes = {}".format(diff_datetimes))
+        diff_dates = (now_dt - last_dt).days
+        print("diff_dates = {}".format(diff_dates))
+        msg = "Hey, {}, I last gave you a coin at {} GMT and it's now {} GMT, that's {} timey-things ago. ".format(msgAuthor.mention,last_dttm,now_dttm,diff_datetimes)
         
-        if diff_dates > timedelta(days=1):
+        if diff_dates > 0:
           msg += "Let's give you another one! "
           add_coin(msgrName)
           new_coins = get_coins(msgrName)
-          msg += f"Now you have {new_coins} coins."
+          msg += "Now you have {} coins.".format(new_coins)
         else:
           coins = get_coins(msgrName)
-          msg += f"You already have {coins} coins. Come back tomorrow and I'll give you another one."
+          msg += "You already have {} coins. Come back tomorrow (GMT time) and I'll give you another one.".format(coins)
           
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        print(embed)
+        await msgChannel.send(embed=embed)
+
+# -------------------------------------------------------
+    elif (msgText in ['c.bal','c.balance','c.biscuits','c.$','c.money','c.cash','c.coins']):
+        print("{} - Getting coins for {}".format(dt_string,msgrName))
+        coins = get_coins(msgrName)
+        msg = "You have {} coins.  Cool!".format(coins)
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
 
 # =======================================================
 # This doesn't work yet
-# @client.event
+@client.event
+async def on_voice_state_update(member, before, after):
+    print ("{} - on_voice_state_update({},{},{})".format(dt_string,member.name,before,after))
+    await channel.send(msg='on_voice_state_update')
+
+# =======================================================
+# This doesn't work yet
+@client.event
 async def on_group_join(channel, user):
-    dt_string = get_date()
+    print ("{} - on_group_join({},{})".format(dt_string,channel.name,user.name))
+    await channel.send(msg='on_group_join')
+
+async def nothing1():
+    dt_string = get_datetime_str()
     embedColor = 0x4c8cd6
-    print(f"Greeting new arrival {user.name} as at {dt_string} on {channel}")
+    print("{} - Greeting new arrival {} as at {} on {}".format(dt_string,user.name,dt_string,channel))
     msg=''
     if not user.bot:
-        msg = f"Ahoy to you {user.mention}, looking for a cat?"
+        msg = "Ahoy to you {user.mention}, looking for a cat?".format()
     else:
-        print(f"{user.name} is a bot!!!")
-        msg = f"Hissss ... {user.name} is a bot!"
+        print("{} is a bot!!!").format(user.name)
+        msg = "Hissss ... {} is a bot!".format(user.name)
     embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-    print(embed)
     await channel.send(embed=embed)
 
 # =======================================================
 # This doesn't work yet
-# @client.event
+@client.event
 async def on_member_join(member):
-    dt_string = get_date()
+    print ("{} - on_member_join({})".format(dt_string,member.name))
+    await channel.send(msg='on_member_join')
+
+async def nothing2():
+    dt_string = get_datetime_str()
     embedColor = 0x4c8cd6
-    print(f"Greeting new arrival {member.name} as at {dt_string}")
+    print("{} - Greeting new arrival {} as at {}".format(dt_string,member.name,dt_string))
     msg=''
     if not member.user.bot:
-        msg = f"Ahoy to you {member.user.mention}, looking for a cat?"
+        msg = "Ahoy to you {}, looking for a cat?".format(member.user.mention)
     else:
-        print(f"{member.user.name} is a bot!!!")
-        msg = f"Hissss ... {member.user.name} is a bot!"
+        print("{} is a bot!!!").format(member.user.name)
+        msg = "Hissss ... {} is a bot!".format(member.user.name)
     embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-    print(embed)
     msgChannel = member.channel
     await msgChannel.send(embed=embed)
     
+# =======================================================
+def prowl():
+    cont = True
+    count = 0
+    while cont:
+        count = count + 1
+        msg = "Purrrrrrrr"
+        embedColor = 0x4c8cd6
+        print(msg)
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        #if defaultChannel is not None:
+        #    defaultChannel.send(embed=embed)
+        time.sleep(33)
+        if count > 5:
+            cont = False 
+
 # =======================================================
 def random_text_face():
     return random.choice(textFaces)
@@ -185,9 +244,9 @@ def load_text_faces():
         lines = f.read().splitlines()
     return lines
 
-# =======================================================
+    # =======================================================
 def exec_sql(sql):
-    conn = sqlite3.connect(dbPath)
+    conn = sqlite3.connect(dbPath, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute(sql)
     conn.commit()
@@ -195,7 +254,7 @@ def exec_sql(sql):
 
 # -------------------------------------------------------
 def query_sql(sql):
-    conn = sqlite3.connect(dbPath)
+    conn = sqlite3.connect(dbPath, isolation_level=None)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute(sql)
@@ -205,31 +264,29 @@ def query_sql(sql):
 
 # -------------------------------------------------------
 def add_owner(name):
-    dt_string = get_date()
-    stmt = f"INSERT INTO cat_owners (join_date, owner_id) VALUES ('{dt_string}','{name}');"
+    dt_string = get_datetime_str()
+    stmt = "INSERT INTO cat_owners (join_date, owner_id, coins, last_daily) VALUES ('{}','{}',1,'{}');".format(dt_string,name,dt_string)
     exec_sql(stmt)
 
 # -------------------------------------------------------
 def remove_owner(name):
-    stmt = f"DELETE FROM cat_owners WHERE owner_id = '{name}';"
+    stmt = "DELETE FROM cat_owners WHERE owner_id = '{}';".format(name)
     exec_sql(stmt)
 
 # -------------------------------------------------------
 def get_owner(name):
-    stmt = f"SELECT * FROM cat_owners WHERE owner_id = '{name}';"
-    result = query_sql(stmt)
-    dt_string = get_date()
-    print(f"{dt_string} Result:\n{result}")
-    return result
+    stmt = "SELECT * FROM cat_owners WHERE owner_id = '{}';".format(name)
+    return query_sql(stmt)
 
 # -------------------------------------------------------
 def add_coin(name):
-  stmt = f"UPDATE cat_owners SET coins=coins+1, last_daily='{get_date()}' WHERE owner_id='{name}'"
+  dt_string = get_datetime_str()
+  stmt = "UPDATE cat_owners SET coins=coins+1, last_daily='{}' WHERE owner_id='{}'".format(dt_string,name)
   exec_sql(stmt)
 
 # -------------------------------------------------------
 def get_coins(name):
-  stmt = f"SELECT coins FROM cat_owners WHERE owner_id='{name}';"
+  stmt = "SELECT coins FROM cat_owners WHERE owner_id='{}';".format(name)
   result = query_sql(stmt)
   return result[0].get('coins')
   
@@ -237,6 +294,10 @@ def get_coins(name):
 # Set up and run the bot
 
 textFaces = load_text_faces()
+
+thread1 = threading.Thread(target = prowl, args = ())
+thread1.start()
+# keep_alive()
 
 token = os.getenv('DISCORD_TOKEN')
 
