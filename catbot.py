@@ -172,6 +172,14 @@ async def on_message(message):
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
 
+# -------------------------------------------------------
+    elif (msgText in ['c.kaput']):
+        print("{} - exit requested by {}".format(dt_string,msgrName))
+        msg = "Bye!"
+        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+        await msgChannel.send(embed=embed)
+        client.logout()
+
 # =======================================================
 # This doesn't work yet
 @client.event
