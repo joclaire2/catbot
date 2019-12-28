@@ -75,7 +75,7 @@ async def on_message(message):
     print ("Channel = {}".format(msgChannel))
 
 # -------------------------------------------------------
-    if (msgText in ['c.info','c.botinfo']):
+    if (msgText in ['c.?','c.info','c.botinfo']):
         print("{} - Telling {} info about catbot".format(dt_string,msgrName))
         embed = discord.Embed(title=random_text_face(), description="catbot is a basic bot with cute mini games where you can collect cats", color=embedColor)
         embed.add_field(name="Version", value=bot_version)
@@ -85,14 +85,14 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText in ['hello','hey','hi']):
+    elif (msgText in ['c.!','hello','hey','hi']):
         print("{} - Saying hi to {}".format(dt_string,msgrName))
         msg = "Hello! {}".format(msgAuthor.mention)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText in ['c.pic','c.picture']):
+    elif (msgText in ['c.*','c.pic','c.picture']):
         print("{} - Sending {} a cat pic".format(dt_string,msgrName))
         embed = discord.Embed(title=random_text_face(), description="Here is a cute cat for you~!", color=embedColor)
         seed = ''.join(random.choice(string.ascii_lowercase) for x in range(10))
@@ -103,25 +103,40 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText == 'c.join'):
-        print("{} - Adding {} to db".format(dt_string,msgrName))
-        msg = "Adding {} as a cat owner".format(msgAuthor.mention)
+    elif (msgText in ['c.+','c.join']):
+        print("{} - Getting member data for {}".format(dt_string,msgrName))
+        result = get_owner(msgrName)
+        if len(result) > 0:
+			print("{} - {} asked to join but they are already in the db".format(dt_string,msgrName))
+			msg = "You're already a member!  You joined on {}".format(result[0]['join_date'])
+        else:
+			print("{} - Adding {} to db".format(dt_string,msgrName))
+			msg = "Welcome to Cat heaven!  Try c."
+			add_owner(msgrName)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
-        add_owner(msgrName)
 
 # -------------------------------------------------------
-    elif (msgText == 'c.unjoin'):
-        print("{} - Removing {} from db".format(dt_string,msgrName))
-        msg = "Ending {}'s cat ownership".format(msgAuthor.mention)
-        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-        embed.add_field(name="You're giving up being a cat owner!", value="Waaaah  :( ")
-        await msgChannel.send(embed=embed)
-        remove_owner(msgrName)
+    elif (msgText in ['c.-','c.unjoin']):
+		
+        print("{} - Getting member data for {}".format(dt_string,msgrName))
+        result = get_owner(msgrName)
+        if len(result) > 0:
+	        print("{} - Removing {} from db".format(dt_string,msgrName))
+	        msg = "Ending {}'s cat ownership".format(msgAuthor.mention)
+	        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+	        embed.add_field(name="You're giving up being a cat owner!", value="Waaaah  :( ")
+			remove_owner(msgrName)
+        else:
+			print("{} - {} asked to unjoin but they aren't in the db".format(dt_string,msgrName))
+			msg = "You're not a member!  Try 'c.join'."
+			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+			
+		await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText == 'c.member'):
-        print("{} - Getting data for {}".format(dt_string,msgrName))
+    elif (msgText in ['c.??','c.member'):
+        print("{} - Getting member data for {}".format(dt_string,msgrName))
         result = get_owner(msgrName)
         msg = "Membership info for {}".format(msgAuthor.mention)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
@@ -133,7 +148,7 @@ async def on_message(message):
         print("{} Result:\n{}".format(dt_string,result))
 
 # -------------------------------------------------------
-    elif (msgText == 'c.daily'):
+    elif (msgText in ['c.$+','c.daily']):
         print("{} - {} is asking for their daily coin".format(dt_string,msgrName))
         now_dttm = get_datetime()
         print("now_dttm = {}".format(now_dttm))
@@ -165,7 +180,7 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText in ['c.bal','c.balance','c.biscuits','c.$','c.money','c.cash','c.coins']):
+    elif (msgText in ['c.$','c.bal','c.balance','c.biscuits','c.money','c.cash','c.coins']):
         print("{} - Getting coins for {}".format(dt_string,msgrName))
         coins = get_coins(msgrName)
         msg = "You have {} coins.  Cool!".format(coins)
@@ -173,7 +188,7 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText in ['c.kaput']):
+    elif (msgText in ['c.#','c.kaput']):
         print("{} - exit requested by {}".format(dt_string,msgrName))
         msg = "Bye!"
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
