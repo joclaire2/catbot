@@ -8,6 +8,7 @@ from datetime import timedelta
 import time
 # from keep_alive import keep_alive
 
+print('------')
 dt_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 print("{} Bootup catbot version {}".format(dt_string,bot_version))
 # =======================================================
@@ -51,9 +52,7 @@ def get_datetime():
 @client.event
 async def on_ready():
     dt_string = get_datetime_str()
-    print("{} Logged in as".format(dt_string))
-    print(client.user.name)
-    print(client.user.id)
+    print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
     print('------')
 
 # =======================================================
@@ -303,9 +302,11 @@ def get_coins(name):
 #  Dev Zone
 # =======================================================
 def prowl():
+	print("{} - Prowling".format(dt_string))
     cont = True
     count = 0
     while cont:
+		print("Cont: {} count: {}".format(cont, count))
         count = count + 1
         msg = "Purrrrrrrr"
         embedColor = 0x4c8cd6
@@ -317,8 +318,12 @@ def prowl():
         if count >= 3:
             cont = False 
 
-thread1 = threading.Thread(target = prowl, args = ())
+# thread1 = threading.Thread(target = prowl, args = ())
 # thread1.start()
+
+defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
+prowl()
+
 
 # =======================================================
 # Set up and run the bot
@@ -327,8 +332,5 @@ token = os.getenv('DISCORD_TOKEN')
 
 # keep_alive()
 client.run(token)
-
-defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
-prowl()
 
 # =======================================================
