@@ -307,20 +307,20 @@ def get_coins(name):
 #  Dev Zone
 # =======================================================
 def prowl():
-	print("{} - Prowling".format(dt_string))
+	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	catbotChannel = client.get_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	cont = True
 	count = 0
 	while cont:
-		print("Cont: {} count: {}".format(cont, count))
+		print("Cont: {} count: {} channel: {}".format(cont, count, catbotChannel))
 		count = count + 1
 		msg = "Purrrrrrrr"
-		embedColor = 0x4c8cd6
 		print(msg)
-		embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 		if catbotChannel is not None:
-                    print ('mew')
-                    catbotChannel.send(embed=embed)
+			print ('mew')
+			embedColor = 0x4c8cd6
+			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+			catbotChannel.send(embed=embed)
 		time.sleep(3)
 		if count >= 3:
 			cont = False 
