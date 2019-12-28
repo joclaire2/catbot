@@ -135,7 +135,7 @@ async def on_message(message):
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
-    elif (msgText in ['c.??','c.member'):
+    elif (msgText in ['c.??','c.member']):
         print("{} - Getting member data for {}".format(dt_string,msgrName))
         result = get_owner(msgrName)
         msg = "Membership info for {}".format(msgAuthor.mention)
