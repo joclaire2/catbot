@@ -319,7 +319,7 @@ def prowl():
 		print(msg)
 		embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 		if catbotChannel is not None:
-			catbotChannel.send(embed=embed)
+			await catbotChannel.send(embed=embed)
 		time.sleep(3)
 		if count >= 3:
 			cont = False 
