@@ -302,11 +302,11 @@ def get_coins(name):
 #  Dev Zone
 # =======================================================
 def prowl():
-	print("{} - Prowling".format(dt_string))
+    print("{} - Prowling".format(dt_string))
     cont = True
     count = 0
     while cont:
-		print("Cont: {} count: {}".format(cont, count))
+        print("Cont: {} count: {}".format(cont, count))
         count = count + 1
         msg = "Purrrrrrrr"
         embedColor = 0x4c8cd6
