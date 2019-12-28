@@ -26,7 +26,7 @@ import sqlite3
 from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 dbPath = '../sqlite/catbot.db'
-defaultChannel = None
+catbotChannel = None
 
 # =======================================================
 # Build Discord Client
@@ -69,7 +69,7 @@ async def on_message(message):
 	msgrName = msgAuthor.name
 	msgChannel = message.channel
 	embedColor = 0x4c8cd6
-	defaultChannel = msgChannel
+	catbotChannel = msgChannel
 	
 	print ("Channel = {}".format(msgChannel))
 
@@ -197,7 +197,7 @@ async def on_message(message):
 		msg = "Bye!"
 		embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 		await msgChannel.send(embed=embed)
-		client.logout()
+		await client.logout()
 
 # =======================================================
 # This doesn't work yet
@@ -308,7 +308,7 @@ def get_coins(name):
 # =======================================================
 def prowl():
 	print("{} - Prowling".format(dt_string))
-	defaultChannel = client.channels.get('622421258986061837')   # catbot-testing = 622421258986061837
+	catbotChannel = client.get_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	cont = True
 	count = 0
 	while cont:
@@ -318,8 +318,8 @@ def prowl():
 		embedColor = 0x4c8cd6
 		print(msg)
 		embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-		if defaultChannel is not None:
-			defaultChannel.send(embed=embed)
+		if catbotChannel is not None:
+			catbotChannel.send(embed=embed)
 		time.sleep(3)
 		if count >= 3:
 			cont = False 
