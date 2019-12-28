@@ -107,32 +107,32 @@ async def on_message(message):
         print("{} - Getting member data for {}".format(dt_string,msgrName))
         result = get_owner(msgrName)
         if len(result) > 0:
-			print("{} - {} asked to join but they are already in the db".format(dt_string,msgrName))
-			msg = "You're already a member!  You joined on {}".format(result[0]['join_date'])
+            print("{} - {} asked to join but they are already in the db".format(dt_string,msgrName))
+            msg = "You're already a member!  You joined on {}".format(result[0]['join_date'])
         else:
-			print("{} - Adding {} to db".format(dt_string,msgrName))
-			msg = "Welcome to Cat heaven!  Try c."
-			add_owner(msgrName)
+            print("{} - Adding {} to db".format(dt_string,msgrName))
+            msg = "Welcome to Cat heaven!  Try c."
+            add_owner(msgrName)
         embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
         await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
     elif (msgText in ['c.-','c.unjoin']):
-		
+        
         print("{} - Getting member data for {}".format(dt_string,msgrName))
         result = get_owner(msgrName)
         if len(result) > 0:
-	        print("{} - Removing {} from db".format(dt_string,msgrName))
-	        msg = "Ending {}'s cat ownership".format(msgAuthor.mention)
-	        embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-	        embed.add_field(name="You're giving up being a cat owner!", value="Waaaah  :( ")
-			remove_owner(msgrName)
+            print("{} - Removing {} from db".format(dt_string,msgrName))
+            msg = "Ending {}'s cat ownership".format(msgAuthor.mention)
+            embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+            embed.add_field(name="You're giving up being a cat owner!", value="Waaaah  :( ")
+            remove_owner(msgrName)
         else:
-			print("{} - {} asked to unjoin but they aren't in the db".format(dt_string,msgrName))
-			msg = "You're not a member!  Try 'c.join'."
-			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-			
-		await msgChannel.send(embed=embed)
+            print("{} - {} asked to unjoin but they aren't in the db".format(dt_string,msgrName))
+            msg = "You're not a member!  Try 'c.join'."
+            embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+            
+        await msgChannel.send(embed=embed)
 
 # -------------------------------------------------------
     elif (msgText in ['c.??','c.member'):
