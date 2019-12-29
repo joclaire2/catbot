@@ -190,7 +190,24 @@ async def on_message(message):
 # -------------------------------------------------------
 	elif (msgText in ['c.~','c.prowl']):
 		print("{} - prowl requested by {}".format(dt_string,msgrName))
-		prowl(msgChannel)
+#		prowl(msgChannel)
+		print("{} - Prowling on {}".format(dt_string, msgChannel))
+		# catbotChannel = client.get_channel('622421258986061837')   # catbot-testing = 622421258986061837
+		cont = True
+		count = 0
+		while cont:
+			print("Cont: {} count: {} channel: {}".format(cont, count, msgChannel))
+			count = count + 1
+			msg = "Purrrrrrrr"
+			print(msg)
+			if msgChannel is not None:
+				print ('mew')
+				embedColor = 0x4c8cd6
+				embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+				await msgChannel.send(embed=embed)
+			time.sleep(3)
+			if count >= 3:
+				cont = False 
 
 # -------------------------------------------------------
 	elif (msgText in ['c.#','c.kaput']):
@@ -321,7 +338,7 @@ def prowl(channelX:TextChannel):
 			print ('mew')
 			embedColor = 0x4c8cd6
 			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-			await channelX.send(embed=embed)
+#			await channelX.send(embed=embed)
 		time.sleep(3)
 		if count >= 3:
 			cont = False 
