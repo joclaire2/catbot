@@ -317,7 +317,7 @@ def get_coins(name):
 # =======================================================
 #  Dev Zone
 # =======================================================
-async def prowl():
+def prowl():
 	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	cont = True
