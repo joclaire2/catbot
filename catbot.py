@@ -56,8 +56,26 @@ async def on_ready():
 	dt_string = get_datetime_str()
 	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
 	print('------')
-	thread1: Thread = threading.Thread(target = prowl, args = (client,))
-	thread1.start()
+	#thread1: Thread = threading.Thread(target = prowl, args = (client,))
+	#thread1.start()
+	
+	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
+	print("{} - Prowling on {}".format(dt_string, catbotChannel))
+	cont = True
+	count = 0
+	while cont:
+		print("Cont: {} count: {} channel: {}".format(cont, count, catbotChannel))
+		count = count + 1
+		msg = "Purrrrrrrr"
+		print(msg)
+		if catbotChannel is not None:
+			print ('mew')
+			embedColor = 0x4c8cd6
+			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+			await catbotChannel.send(embed=embed)
+		time.sleep(3)
+		if count >= 10:
+			cont = False 
 
 # =======================================================
 @client.event
