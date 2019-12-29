@@ -32,7 +32,7 @@ catbotChannel = None
 
 # =======================================================
 # Build Discord Client
-client = discord.Client()
+client: Client = discord.Client()
 
 # -------------------------------------------------------
 def get_date_str():
@@ -56,6 +56,8 @@ async def on_ready():
 	dt_string = get_datetime_str()
 	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
 	print('------')
+	thread1: Thread = threading.Thread(target = prowl, args = (client))
+	thread1.start()
 
 # =======================================================
 @client.event
@@ -333,11 +335,11 @@ textFaces = load_text_faces()
 token = os.getenv('DISCORD_TOKEN')
 
 # keep_alive()
-await client.connect()
-await client.login(token=token, bot=True)
+#await client.connect()
+#await client.login(token=token, bot=True)
 
-thread1 = threading.Thread(target = prowl, args = (client))
-thread1.start()
+#thread1 = threading.Thread(target = prowl, args = (client))
+#thread1.start()
 
 client.run(token)
 
