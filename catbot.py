@@ -191,7 +191,7 @@ async def on_message(message):
 	elif (msgText in ['c.~','c.prowl']):
 		print("{} - prowl requested by {}".format(dt_string,msgrName))
 #		prowl(msgChannel)
-		catbotChannel: TextChannel = client.get_channel('622421258986061837')   # catbot-testing = 622421258986061837
+		catbotChannel: TextChannel = client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 		print("{} - Prowling on {}".format(dt_string, catbotChannel))
 		cont = True
 		count = 0
