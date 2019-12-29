@@ -23,6 +23,7 @@ from discord import TextChannel
 import os
 import threading
 import random
+from random import randrange
 import string
 import sqlite3
 from dotenv import load_dotenv
