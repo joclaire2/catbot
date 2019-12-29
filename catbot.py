@@ -29,6 +29,7 @@ from dotenv import load_dotenv
 load_dotenv('../.secure/.env')
 dbPath = '../sqlite/catbot.db'
 catbotChannel = None
+random.seed()
 
 # =======================================================
 # Build Discord Client
@@ -61,21 +62,14 @@ async def on_ready():
 	
 	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
-	cont = True
-	count = 0
-	while cont:
-		print("Cont: {} count: {} channel: {}".format(cont, count, catbotChannel))
-		count = count + 1
+	while True:
+		print("Prowling channel: {}".format(catbotChannel))
 		msg = "Purrrrrrrr"
-		print(msg)
 		if catbotChannel is not None:
-			print ('mew')
 			embedColor = 0x4c8cd6
 			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 			await catbotChannel.send(embed=embed)
-		time.sleep(3)
-		if count >= 10:
-			cont = False 
+			await time.sleep(randrange(60, 300))
 
 # =======================================================
 @client.event
