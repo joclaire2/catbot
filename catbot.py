@@ -15,6 +15,7 @@ print("{} Bootup catbot version {}".format(dt_string,bot_version))
 # Load Discord Library
 import discord
 from discord.ext import commands
+from discord import TextChannel
 
 # =======================================================
 # Load libraries and global parameters
@@ -306,7 +307,7 @@ def get_coins(name):
 # =======================================================
 #  Dev Zone
 # =======================================================
-def prowl(channelX):
+def prowl(channelX:TextChannel):
 	print("{} - Prowling on {}".format(dt_string, channel))
 	# catbotChannel = client.get_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	cont = True
