@@ -56,7 +56,7 @@ async def on_ready():
 	dt_string = get_datetime_str()
 	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
 	print('------')
-	thread1: Thread = threading.Thread(target = prowl)
+	thread1: Thread = threading.Thread(target = await prowl)
 	thread1.start()
 
 # =======================================================
@@ -317,7 +317,7 @@ def get_coins(name):
 # =======================================================
 #  Dev Zone
 # =======================================================
-def prowl():
+async def prowl():
 	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	cont = True
