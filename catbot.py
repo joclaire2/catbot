@@ -56,7 +56,7 @@ async def on_ready():
 	dt_string = get_datetime_str()
 	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
 	print('------')
-	thread1: Thread = threading.Thread(target = prowl, args = (client))
+	thread1: Thread = threading.Thread(target = prowl)
 	thread1.start()
 
 # =======================================================
@@ -198,10 +198,17 @@ async def on_message(message):
 # -------------------------------------------------------
 	elif (msgText in ['c.#','c.kaput']):
 		print("{} - exit requested by {}".format(dt_string,msgrName))
-		msg = "Bye!"
-		embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
-		await msgChannel.send(embed=embed)
-		await client.logout()
+		
+		if msgrName == "ribman":
+			msg = "Bye!"
+			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+			await msgChannel.send(embed=embed)
+			await client.logout()
+		else:
+			msg = "Not!"
+			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
+			await msgChannel.send(embed=embed)
+			
 
 # =======================================================
 # This doesn't work yet
@@ -310,8 +317,8 @@ def get_coins(name):
 # =======================================================
 #  Dev Zone
 # =======================================================
-async def prowl(theClient):
-	catbotChannel: TextChannel = await theClient.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
+async def prowl():
+	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	cont = True
 	count = 0
