@@ -333,10 +333,12 @@ textFaces = load_text_faces()
 token = os.getenv('DISCORD_TOKEN')
 
 # keep_alive()
-
-await client.start(token)
+await client.connect()
+await client.login(token=token, bot=True)
 
 thread1 = threading.Thread(target = prowl, args = (client))
 thread1.start()
+
+client.run(token)
 
 # =======================================================
