@@ -70,7 +70,7 @@ async def on_ready():
 			embedColor = 0x4c8cd6
 			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 			await catbotChannel.send(embed=embed)
-			await time.sleep(randrange(60, 300))
+			time.sleep(randrange(5, 20))
 
 # =======================================================
 @client.event
