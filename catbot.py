@@ -53,14 +53,8 @@ def get_datetime():
 	return datetime.strptime(get_datetime_str(), '%Y-%m-%d %H:%M:%S')
 
 # =======================================================
-@client.event
-async def on_ready():
-	dt_string = get_datetime_str()
-	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
-	print('------')
-	#thread1: Thread = threading.Thread(target = prowl, args = (client,))
-	#thread1.start()
-	
+
+def on_ready_body():
 	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	while True:
@@ -72,6 +66,15 @@ async def on_ready():
 			await catbotChannel.send(embed=embed)
 			time.sleep(randrange(5, 20))
 
+@client.event
+async def on_ready():
+	dt_string = get_datetime_str()
+	print("{} - Logged in as name: {}".format(dt_string, client.user.name, client.user.id))
+	print('------')
+	#thread1: Thread = threading.Thread(target = prowl, args = (client,))
+	#thread1.start()
+	on_ready_body()
+	
 # =======================================================
 @client.event
 async def on_message(message):
