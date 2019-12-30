@@ -54,7 +54,7 @@ def get_datetime():
 
 # =======================================================
 
-async :def on_ready_body():
+async def on_ready_body():
 	catbotChannel: TextChannel = await client.fetch_channel('622421258986061837')   # catbot-testing = 622421258986061837
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	while True:
