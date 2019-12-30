@@ -73,7 +73,7 @@ async def on_ready():
 	print('------')
 	#thread1: Thread = threading.Thread(target = prowl, args = (client,))
 	#thread1.start()
-	on_ready_body()
+	await on_ready_body()
 	
 # =======================================================
 @client.event
