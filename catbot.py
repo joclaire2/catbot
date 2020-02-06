@@ -59,12 +59,12 @@ async def on_ready_body():
 	print("{} - Prowling on {}".format(dt_string, catbotChannel))
 	while True:
 		print("Prowling channel: {}".format(catbotChannel))
-		msg = "Purrrrrrrr"
+		msg = random_cat_sound()
 		if catbotChannel is not None:
 			embedColor = 0x4c8cd6
 			embed = discord.Embed(title=random_text_face(), description=msg, color=embedColor)
 			await catbotChannel.send(embed=embed)
-			time.sleep(randrange(5, 20))
+			time.sleep(randrange(5, 300))
 
 @client.event
 async def on_ready():
@@ -279,8 +279,12 @@ def random_text_face():
 	return random.choice(textFaces)
 	
 # =======================================================
-def load_text_faces():
-	with open('./text_faces.txt') as f:
+def random_cat_sound():
+	return random.choice(catSounds)
+	
+# =======================================================
+def load_file_data(filename):
+	with open("./{}.txt".format(filename)) as f:
 		lines = f.read().splitlines()
 	return lines
 
@@ -354,7 +358,8 @@ async def prowl(theClient):
 
 # =======================================================
 # Set up and run the bot
-textFaces = load_text_faces()
+textFaces = load_file_data('text_faces')
+catSounds = load_file_data('cat_sounds')
 token = os.getenv('DISCORD_TOKEN')
 
 # keep_alive()
